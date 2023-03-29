@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/welcome')
 def begin():
     
-    return render_template('welcome.html')
+    return render_template('index.html')
 
 if __name__ == "__main__":
 	app.run()
