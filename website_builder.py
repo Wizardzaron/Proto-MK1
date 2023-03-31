@@ -3,6 +3,7 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from datetime import timedelta
+from email_validator import validate_email, EmailNotValidError
 
 
 app = Flask(__name__)
@@ -13,6 +14,8 @@ def signup_post():
     username = request.form['username']
     password = request.form['password']
     email = request.form['email']
+    phonenumber = request.form['phonenumber']
+
     msg = ''
 
 	#password must be between 4 and 255
@@ -24,8 +27,26 @@ def signup_post():
     if len(username) < 4 or len(username) > 255:
          msg= 'Username needs to be between 4 and 255 characters long.'
          return render_template('signup.html', msg = msg)
-    #check if email is valid
     
+    #check if email is valid
+
+    #another way of doing if else statement
+
+    try:
+        # Check that the email address is valid.
+        validation = validate_email(email)
+
+        # Take the normalized form of the email address
+        # for all logic beyond this point (especially
+        # before going to a database query where equality
+        # may not take into account Unicode normalization).  
+        email = validation.email
+    except EmailNotValidError as e:
+        # Email is not valid.
+        # The exception message is human-readable.
+        return render_template('signup.html', msg = 'Email not valid: ' + str(e))
+
+
     #username cannot include whitespace
     if any (char.isspace() for char in username):
          msg = 'Username cannot have spaces in it.'
@@ -37,10 +58,28 @@ def signup_post():
          return render_template('signup.html', msg = msg)
 
     #username cannot already exist in database
+    conn = sqlite3.connect('userdata.db')
     
+    # cursor object
+    cur = conn.cursor()
+    
+    # to select all column we will use
+    getCountByUsername = '''SELECT COUNT() FROM info WHERE username = ?'''
+    cur.execute(getCountByUsername,[username])
+    countOfUsername = cur.fetchone()
+
+    if countOfUsername[0] != 0 :
+         msg = 'Username already exists.'
+         return render_template('signup.html', msg = msg)        
+
+    #ready to insert into database
+    insertNewUser = """INSERT INTO info (username,password,phonenumber,email) VALUES (?,?,?,?)"""
+    conn.execute(insertNewUser, [username, password, phonenumber, email])
+    conn.commit()
+
+
     return render_template('welcome.html', msg = 'Signup successful.')
 
-    # if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
 		
 		
 		
