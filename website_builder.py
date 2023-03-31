@@ -78,7 +78,7 @@ def signup_post():
     conn.commit()
 
 
-    return render_template('welcome.html', msg = 'Signup successful.')
+    return render_template('welcome.html', msg = 'Signup successful. ')
 
 		
 		
