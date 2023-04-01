@@ -77,6 +77,7 @@ def signup_post():
     conn.execute(insertNewUser, [username, password, phonenumber, email])
     conn.commit()
 
+    cur.close()
 
     return render_template('welcome.html', msg = 'Signup successful. ')
 
@@ -105,6 +106,44 @@ def signup_post():
 
     # cur.close()
 
+@app.route('/login', methods =['GET', 'POST'])
+def login():
+    
+
+    #For the new /login route we need to specifiy the POST method as well as GET so that end users can send a POST request 
+    # with their login credentials to that /login endpoint
+
+
+    try:
+        if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+
+
+            msg = ''
+
+            username = request.form['username']
+            
+            password = request.form['password']
+
+            conn = sqlite3.connect('userdata.db')
+            cur = conn.cursor()
+
+
+            #COUNT() means that it returns the number of rows that matches a specified criterion
+            getCountByUsernameAndPassword = '''SELECT COUNT() FROM info WHERE username = ? AND password = ?'''
+            conn.commit()
+            cur.execute(getCountByUsernameAndPassword,[username,password])
+            
+            countOfUsernameAndPassword = cur.fetchone()
+            
+            if countOfUsernameAndPassword[0] == 0:
+                msg = 'Account does not exist.'
+                return render_template('welcome.html', msg = msg)
+    except Exception as e:
+         print('An error occured:', str(e))
+
+    return render_template('login.html', msg = 'Login successful. ')
+
+
 
 
 @app.route('/signup', methods =['GET'])
@@ -114,7 +153,7 @@ def signup_get():
 @app.route('/')
 @app.route('/welcome', methods =['GET', 'POST'])
 def welcome():
-    
+     
     return render_template('welcome.html')
 
 if __name__ == "__main__":

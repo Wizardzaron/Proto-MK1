@@ -5,7 +5,25 @@
     </head>
 
     <body>
-        <p> Hello World </p>
+        <h1> Hello World </h1>
+
+        <p> Please log in</p>
+
+
+
+        <!--form action helps direct where the input data should go-->
+        
+        <form action="{{ url_for('login')}}" form method="post" autocomplete="off">
+
+            <input type="text" name="username" placeholder="Enter Your Username" class="textbox" id="username"
+            required></br></br>
+            <input type="password" name="password" placeholder="Enter Your Password" class="textbox" id="password"
+            required></br></br>
+            <input type="submit" class="btn" value="Log In">
+        </form>
+        
+        <p> If you don't have an account why not sign up? </p>
+
         <div class="msg">{{ msg }}</div>
         <a href="/signup">Sign up</a>
     </body>
