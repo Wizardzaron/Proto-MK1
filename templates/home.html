@@ -1,0 +1,30 @@
+<html>
+
+    <body>
+        <div class="msg">{{ msg }}</div>
+
+        <p>Here are the most current reviews</p>
+
+
+        {% if session.logged_in %}
+            <div class="msg2">{{ msg2 }}</div>
+            <a href="/publish"> Publish a review?</a>
+
+        {% else %}
+
+            <p> If you would like to publish a review please login</p>
+
+                <a href ="/login"> Login</a>
+
+            <p> If you don't have an account then register</p>
+
+                <a href ="/signup"> Register</a>
+        {% endif %}
+
+
+
+    </body>
+
+
+
+</html>

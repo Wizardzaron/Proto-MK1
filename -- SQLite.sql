@@ -7,4 +7,13 @@
 --	email VARCHAR(255) NOT NULL UNIQUE
 --);
 
-INSERT INTO info VALUES (1, 'Ryan', 'JohnnyBoy234', '7605856776', 'mochi456@csu.fullerton.edu');
+--INSERT INTO info VALUES (1, 'Ryan', 'JohnnyBoy234', '7605856776', 'mochi456@csu.fullerton.edu');
+
+
+CREATE TABLE reviews (
+
+id INTEGER,
+images BLOB NOT NULL,
+reveiws TEXT NOT NULL,
+FOREIGN KEY(id) REFERENCES info(id)
+);

@@ -7,7 +7,7 @@ from email_validator import validate_email, EmailNotValidError
 
 
 app = Flask(__name__)
-
+app.secret_key = 'Sa_sa'
 
 @app.route('/signup', methods =['POST'])
 def signup_post():
@@ -15,8 +15,9 @@ def signup_post():
     password = request.form['password']
     email = request.form['email']
     phonenumber = request.form['phonenumber']
-
     msg = ''
+    msg2 = ''
+
 
 	#password must be between 4 and 255
     if len(password) < 4 or len(password) > 255:
@@ -140,11 +141,22 @@ def login():
                 return render_template('welcome.html', msg = msg)
     except Exception as e:
          print('An error occured:', str(e))
+    
+    #sessions carry data over the website
+    
+    session['logged_in'] = True
+    return render_template('home.html', msg = 'Login successful. ', msg2 = 'Would you like to publish a review?')
 
-    return render_template('login.html', msg = 'Login successful. ')
 
+@app.route('/home', methods = ['GET'])
+def home_page():
+     session.pop('logged_in', None)
+     return render_template('home.html', msg = 'Welcome Guest')
 
-
+@app.route('/publish', methods = ['GET', 'POST'])
+def publish_review():
+     session.pop('logged_in', None)
+     return render_template('publish.html')
 
 @app.route('/signup', methods =['GET'])
 def signup_get():
