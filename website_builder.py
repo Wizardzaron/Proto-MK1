@@ -1,13 +1,17 @@
 #need to create db
 #fallout cookbook jokes
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+from flask import Flask, render_template, request, redirect, url_for, session, abort, current_app
 from datetime import timedelta
+from flask import send_from_directory
 from email_validator import validate_email, EmailNotValidError
-
+import os
 
 app = Flask(__name__)
 app.secret_key = 'Sa_sa'
+
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png']
 
 @app.route('/signup', methods =['POST'])
 def signup_post():
@@ -82,30 +86,36 @@ def signup_post():
 
     return render_template('welcome.html', msg = 'Signup successful. ')
 
-		
-		
-		
-    #     cur.execute('SELECT * FROM accounts WHERE username = % s AND password = % s', (username, password, ))
-    #     conn.commit()
-    #     account = cur.fetchone()
-    #     if account:
-			
-	# 		session.permanent = True
-	# 		session['loggedin'] = True
-	# 		session['id'] = account['id']
-	# 		session['username'] = account['username']
-	# 		msg = 'Logged in successfully !'
-	# 		return render_template('index.html', msg = msg)
-	# 	else:
-	# 		msg = 'Incorrect username / password !'
-	# return render_template('login.html', msg = msg)
-        
-    # con = sqlite3.connect("userdata.db")
-    # cur = con.cursor()
-    # #request.form used on post html pages
+@app.route('/publish', methods = ['POST'])
+def publish_post():
+    #image = request.files['imagefile']
+    description = request.form['description']
     
+    if len(description) < 50:
+         msg= 'Your review must be longer than 50 characters long'
+         return render_template('publish.html', msg = msg)
 
-    # cur.close()
+
+
+    #splits apart the file name and grabs the extenstion 
+   # file_ext = os.path.splitext(image)[1]
+    
+    #current_app can be used to access data about the running application, including the configuration (such as UPLOAD_EXTENSIONS)
+
+   # if file_ext not in current_app.config('UPLOAD_EXTENSIONS'):
+    #    return render_template( 'publish.html' , msg = 'This file type is not supported.')
+
+    conn = sqlite3.connect('userdata.db')
+    
+    cur = conn.cursor()
+
+    insertNewUser = """INSERT INTO reviews (reveiws) VALUES (?)"""
+    conn.execute(insertNewUser, [description])
+    conn.commit()
+
+    cur.close()
+
+    return render_template('home.html', msg = 'Review published')
 
 @app.route('/login', methods =['GET', 'POST'])
 def login():
@@ -150,11 +160,24 @@ def login():
 
 @app.route('/home', methods = ['GET'])
 def home_page():
-     session.pop('logged_in', None)
-     return render_template('home.html', msg = 'Welcome Guest')
+    session.pop('logged_in', None)
 
-@app.route('/publish', methods = ['GET', 'POST'])
-def publish_review():
+    conn = sqlite3.connect('userdata.db')
+    
+    cur = conn.cursor()
+    
+    getReviews =  '''SELECT * FROM reviews'''
+    cur.execute(getReviews)
+    reviews = cur.fetchall()
+
+
+    conn.close()
+
+    return render_template('home.html', msg = 'Welcome Guest', reviews = reviews)
+
+
+@app.route('/publish', methods = ['GET'])
+def publish_get():
      session.pop('logged_in', None)
      return render_template('publish.html')
 

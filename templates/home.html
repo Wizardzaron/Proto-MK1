@@ -5,6 +5,9 @@
 
         <p>Here are the most current reviews</p>
 
+        {% for data in reviews%}
+            <th>{{data[3]}}</th>
+            <td>{{data[2]}}</td>
 
         {% if session.logged_in %}
             <div class="msg2">{{ msg2 }}</div>
