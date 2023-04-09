@@ -90,6 +90,7 @@ def signup_post():
 def publish_post():
     #image = request.files['imagefile']
     description = request.form['description']
+    title = request.form['title']
     
     if len(description) < 50:
          msg= 'Your review must be longer than 50 characters long'
@@ -109,8 +110,8 @@ def publish_post():
     
     cur = conn.cursor()
 
-    insertNewUser = """INSERT INTO reviews (reveiws) VALUES (?)"""
-    conn.execute(insertNewUser, [description])
+    insertNewUser = """INSERT INTO reviews (reveiws, title) VALUES (?, ?)"""
+    conn.execute(insertNewUser, [description, title])
     conn.commit()
 
     cur.close()
@@ -155,7 +156,21 @@ def login():
     #sessions carry data over the website
     
     session['logged_in'] = True
-    return render_template('home.html', msg = 'Login successful. ', msg2 = 'Would you like to publish a review?')
+
+    try:
+         
+        getReviews =  '''SELECT title, reveiws FROM reviews'''
+        cur.execute(getReviews)
+        reviews = cur.fetchall()
+
+    except Exception as e:
+        msg = 'Query Failed: %s\nError: %s' % (getReviews, str(e))
+        return render_template('home.html', msg = msg)
+    
+    finally:    
+        conn.close()
+
+    return render_template('home.html', msg = 'Login successful. ', msg2 = 'Would you like to publish a review?', reviews = reviews)
 
 
 @app.route('/home', methods = ['GET'])
@@ -166,12 +181,18 @@ def home_page():
     
     cur = conn.cursor()
     
-    getReviews =  '''SELECT * FROM reviews'''
-    cur.execute(getReviews)
-    reviews = cur.fetchall()
+    try:
+         
+        getReviews =  '''SELECT title, reveiws FROM reviews'''
+        cur.execute(getReviews)
+        reviews = cur.fetchall()
 
-
-    conn.close()
+    except Exception as e:
+        msg = 'Query Failed: %s\nError: %s' % (getReviews, str(e))
+        return render_template('home.html', msg = msg)
+    
+    finally:    
+        conn.close()
 
     return render_template('home.html', msg = 'Welcome Guest', reviews = reviews)
 

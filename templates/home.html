@@ -5,10 +5,16 @@
 
         <p>Here are the most current reviews</p>
 
-        {% for data in reviews%}
-            <th>{{data[3]}}</th>
-            <td>{{data[2]}}</td>
-
+        <ul> 
+            {% for data in reviews%}
+               
+                <h1>{{data[0]}}</h1>
+                <h4>{{data[1]}}</h4>
+                <div>{{data[2]}}</div>
+                
+            </ul>
+            {% endfor %}
+        
         {% if session.logged_in %}
             <div class="msg2">{{ msg2 }}</div>
             <a href="/publish"> Publish a review?</a>
