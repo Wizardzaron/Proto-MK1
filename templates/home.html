@@ -1,39 +1,40 @@
 <html>
-
+    
     <body>
         <div class="msg">{{ msg }}</div>
 
         <p>Here are the most current reviews</p>
 
-        <ul> 
-            {% for data in reviews%}
-               
-                <h1>{{data[0]}}</h1>
-                <h4>{{data[1]}}</h4>
-                <div>{{data[2]}}</div>
-                
-            </ul>
-            {% endfor %}
-        
-        {% if session.logged_in %}
-            <div class="msg2">{{ msg2 }}</div>
-            <a href="/publish"> Publish a review?</a>
+        <ul>
+            {% for row in rows %}
 
-        {% else %}
+            <h1>{{ row.id }}</h1>
+            <h4>{{ row.title }}</h4>
+            <div>{{row.reveiw}}</div>
+            {% if row.image_name %}
+                <h1>{{row.image_name}}</h1>
+                <img
+                src="{{ pathToImage }}{{row.image_name}}"
+                alt="Error unable to output image"
+                />
+            {% endif %}
 
-            <p> If you would like to publish a review please login</p>
+            <h4>{{row.creator_id}}</h4>
+        </ul>
+            {% endfor %} 
+            {% if session.logged_in %}
+                <div class="msg2">{{ msg2 }}</div>
+                <a href="/publish"> Publish a review?</a>
 
-                <a href ="/login"> Login</a>
+            {% else %}
 
-            <p> If you don't have an account then register</p>
+                <p>If you would like to publish a review please login</p>
 
-                <a href ="/signup"> Register</a>
-        {% endif %}
+                <a href="/login"> Login</a>
 
+                <p>If you don't have an account then register</p>
 
-
+                <a href="/signup"> Register</a>
+            {% endif %}
     </body>
-
-
-
 </html>

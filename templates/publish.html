@@ -3,12 +3,12 @@
     <body>
 
         <div class="msg">{{ msg }}</div>
-    <form method="post" autocomplete="off">
+    <form method="POST" autocomplete="off" enctype="multipart/form-data">
 
 
-        <!-- <label for="imagefile">Please insert the image you're referring to</label><br>
-        <input type="file" name="imagefile" id="imagefile"
-        required></br></br> -->
+        <label for="imagefile">Please insert the image you're referring to</label><br>
+        <input type="file" name="file" id="imagefile"
+        required></br></br>
 
         <input type="text" name="title" placeholder="Please write the title of the food you'll review" class="textbox" id="title"
         required></br></br>

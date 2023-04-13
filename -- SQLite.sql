@@ -24,5 +24,13 @@
 --ALTER TABLE reviews
 --DROP COLUMN images;
 
+--CREATE TABLE reviews(
 
-INSERT INTO reviews VALUES(1, 'The Mystery Meat Wrapped Nukalurk is absolutly delicious. The brown sugar mixed with the cumin spice really make the flaovers pop with the scallops. I was not able to find bacon though so I went to jacks place to get some of his meat. He always seem to have fresh meat available even though I dont see any cows or pigs, wonder where he gets it from?', 'Mystery Meat Wrapped Nukalurk')
+--    id INTEGER PRIMARY KEY AUTOINCREMENT,
+--    title TEXT NOT NULL,
+--    reveiw TEXT NOT NULL,
+--    image_name TEXT NOT NULL,
+--    cretor_id
+--);
+
+UPDATE reviews SET image_name = 'JPEG_Dog.jpeg'  WHERE title = 'review 1 title'
