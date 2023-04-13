@@ -1,0 +1,9 @@
+sqlite3
+flask
+datetime
+import datetime
+functools
+email_validator
+os
+sys
+jwt
