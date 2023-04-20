@@ -7,12 +7,11 @@
     <body>
         <h1> Hello World </h1>
 
+        <div class="msg">{{ msg }}</div>
+
         <p> Please log in</p>
 
-
-
         <!--form action helps direct where the input data should go-->
-        
         <form action="{{ url_for('login')}}" form method="post" autocomplete="off">
 
             <input type="text" name="username" placeholder="Enter Your Username" class="textbox" id="username"
@@ -23,11 +22,11 @@
         </form>
         
         <p> If you don't have an account why not sign up? </p>
-
-        <div class="msg">{{ msg }}</div>
+ 
         <a href="/signup">Sign up</a>
 
         <p> If you don't want to sign up you can still explore as a guest! </p>
+        
         <a href="/home">Continue as guest</a>
 
     </body>
