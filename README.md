@@ -3,6 +3,6 @@ There's only one member on this team which is me: Ryan Haddadi
 
 First you'll need to pull the repo onto vs code
 
-To run the program you'll need multiple packages including sqlite, timedelta, flask, venv, etc. You can get the list of required packages in the requirements.txt file
+Next you'll need to create a virtual environment(venv) and download all the packages mentions in the requirements.txt file onto it in order to make the program function
 
-then all that's left is to type in python website_builder.py into your venv
+Lastly once you've downloaded all the packages you need to type in the terminal (with venv activated) python website_builder.py
